@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BooksModule } from './books/books.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { BooksModule } from './books/books.module';
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Set to false in production
     }),
-    BooksModule
+    BooksModule,
+    UsersModule
     
   ],
   controllers: [AppController],
