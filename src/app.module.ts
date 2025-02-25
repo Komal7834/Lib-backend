@@ -4,7 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BooksModule } from './books/books.module';
-import { UsersModule } from './users/users.module';
+
+import { UserEntity } from './users/users.entity';
+import { UserModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,9 +19,10 @@ import { UsersModule } from './users/users.module';
       database: 'library',
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Set to false in production
+      entities: [UserEntity],
     }),
     BooksModule,
-    UsersModule
+    UserModule
     
   ],
   controllers: [AppController],
