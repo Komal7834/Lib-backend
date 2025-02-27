@@ -2,6 +2,7 @@
 /* eslint-disable prettier/prettier */
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsEmail } from 'class-validator';
+import { Role } from 'src/enum/role.enum';
 
 @Entity('users')
 export class UserEntity {
@@ -15,6 +16,11 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column({ default: 'librarian' }) // Role can be 'admin' or 'librarian'
-  role: string;
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.LIBRARIAN,
+    
+  })
+  role: Role;
 }

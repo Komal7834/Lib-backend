@@ -16,7 +16,7 @@ import { UserModule } from './users/users.module';
       port: 5433, // Default PostgreSQL port
       username: 'postgres',
       password: 'Premp7@196',
-      database: 'library',
+      database: 'library1',
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Set to false in production
       entities: [UserEntity],
