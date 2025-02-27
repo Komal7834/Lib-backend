@@ -38,7 +38,7 @@ export class UserService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { email: user.email, role: user.role };
       const accessToken = await this.jwtService.signAsync(payload);
-      return { accessToken };
+      return { accessToken};
     } else {
       throw new UnauthorizedException('Invalid credentials');
     }

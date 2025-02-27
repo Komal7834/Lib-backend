@@ -19,11 +19,18 @@ export class UserController {
   login(@Body() loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
     return this.userService.login(loginUserDto);
   }
-
+  
   // Protected Route Example
-  @Get('profile')
+  @Get('profile')   
   @UseGuards(AuthGuard('jwt'))
   getProfile(@Request() req) {
     return req.user;
   }
-}
+  @Get()
+  async findAll(): Promise<{ message: string; data: UserEntity[] }> {
+    const users = await this.userService.findAll();
+    return { message: "this is your data", data: users };
+  }
+
+  }  
+
