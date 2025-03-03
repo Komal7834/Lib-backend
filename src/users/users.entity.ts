@@ -20,7 +20,15 @@ export class UserEntity {
     type: 'enum',
     enum: Role,
     default: Role.LIBRARIAN,
-    
+
   })
   role: Role;
+  
+  @Column()
+   city: string;
+ 
+  
+   @Column()
+   mobile: string;
+   
 }

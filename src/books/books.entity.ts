@@ -7,7 +7,14 @@ export class BookEntity {
   id: number;
 
   @Column()
-  title: string;
+  subject: string;
+
+  @Column()
+  bookNo: string;
+
+  @Column()
+  book : string;
+
 
   @Column()
   author: string;
@@ -16,8 +23,6 @@ export class BookEntity {
   publisher: string;
 
   @Column()
-  total : number;
+  quantity: number;
 
-  @Column()
-  issued: number;
 }

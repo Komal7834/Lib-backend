@@ -26,6 +26,8 @@ export class UserController {
   getProfile(@Request() req) {
     return req.user;
   }
+
+  
   @Get()
   async findAll(): Promise<{ message: string; data: UserEntity[] }> {
     const users = await this.userService.findAll();

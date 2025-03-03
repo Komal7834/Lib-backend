@@ -7,6 +7,7 @@ import { BooksModule } from './books/books.module';
 
 import { UserEntity } from './users/users.entity';
 import { UserModule } from './users/users.module';
+import { BookEntity } from './books/books.entity';
 
 @Module({
   imports: [
@@ -16,10 +17,10 @@ import { UserModule } from './users/users.module';
       port: 5433, // Default PostgreSQL port
       username: 'postgres',
       password: 'Premp7@196',
-      database: 'library1',
+      database: 'ttt',
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Set to false in production
-      entities: [UserEntity],
+      entities: [UserEntity, BookEntity],
     }),
     BooksModule,
     UserModule

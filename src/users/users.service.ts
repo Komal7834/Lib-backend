@@ -18,13 +18,15 @@ export class UserService {
 
   // SIGN UP
   async signUp(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { email, password, role } = createUserDto;
+    const { email, password, role, city, mobile } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = this.userRepository.create({
       email,
       password: hashedPassword,
       role,
+      city,
+      mobile
     });
 
     return this.userRepository.save(newUser);

@@ -1,22 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable prettier/prettier */
-import { IsString, IsInt, Min } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateBookDto {
-  @IsString()
-  title: string;
+  @IsNotEmpty({ message: "❌ 'subject' field is required!" })
+  subject: string;
 
-  @IsString()
+  @IsNotEmpty({ message: "❌ 'bookNo' field is required!" })
+  bookNo: string;
+
+  @IsNotEmpty({ message: "❌ 'book' field is required!" })
+  book: string;
+
+  @IsNotEmpty({ message: "❌ 'author' field is required!" })
   author: string;
 
-  @IsString()
+  @IsNotEmpty({ message: "❌ 'publisher' field is required!" })
   publisher: string;
 
-  @IsInt()
-  @Min(0)
-  total: number;
-
-  @IsInt()
-  @Min(0)
-  isued: number;
+  @IsNotEmpty({ message: "❌ 'quantity' field is required!" })
+  quantity: number;
 }

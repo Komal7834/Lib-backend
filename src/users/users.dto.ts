@@ -1,4 +1,4 @@
-import { IsString, IsEmail, MinLength, IsEnum } from 'class-validator';
+import { IsString, IsEmail, MinLength,MaxLength, IsEnum } from 'class-validator';
 import { Role } from 'src/enum/role.enum';
 
 export class CreateUserDto {
@@ -11,4 +11,11 @@ export class CreateUserDto {
 
   @IsEnum(Role, { message: 'Role must be either admin or librarian' })
   role: Role;
+  
+  @IsString()
+  @MaxLength(10)
+  mobile: string;
+
+  @IsString()
+  city: string;
 }
