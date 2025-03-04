@@ -50,4 +50,6 @@ export class UserService {
   async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
+
+  
 }
