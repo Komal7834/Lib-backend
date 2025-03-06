@@ -4,9 +4,11 @@ import { Repository } from 'typeorm';
 import { BookEntity } from './books.entity';
 import { CreateBookDto } from './books.dto';
 import {  ViewBookDto } from './vbook.dto';
+import { UpdateBookDto } from './updateBook.dto';
 
 @Injectable()
 export class BooksService {
+ 
  
   constructor(
     @InjectRepository(BookEntity)
@@ -31,7 +33,23 @@ export class BooksService {
       return this.bookRepository.find();
     }
 
-    async findOne(subject: string): Promise<BookEntity | null> {
-      return this.bookRepository.findOne({ where: { subject } });
+    async findOne(id: number): Promise<BookEntity | null> {
+      return this.bookRepository.findOne({ where: { id } });
+    }
+
+    async update(id: number, updateBookDto: UpdateBookDto): Promise<BookEntity> {
+      const book = await this.bookRepository.findOne({ where: { id } });
+      if (!book) {
+        throw new Error(`❌ Book with ID ${id} not found!`);
+      }
+      
+      Object.assign(book, updateBookDto);
+      return this.bookRepository.save(book);
+    }
+
+    async delete(id: number): Promise<string> {
+      const result = await this.bookRepository.delete(id);
+     
+      return `✅ Book with ID ${id} has been deleted successfully!`;
     }
   }

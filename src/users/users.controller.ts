@@ -5,12 +5,17 @@ import { UserService } from './users.service';
 import { UserEntity } from './users.entity';
 import { CreateUserDto } from './users.dto';
 import { LoginUserDto } from './login.dto';
+import { RolesGuard } from 'src/role.guard';
+import { Roles } from 'src/role.decorator';
+import { Role } from 'src/enum/role.enum';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signup')
+   @UseGuards(RolesGuard)
+   @Roles(Role.ADMIN)
   signUp(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.signUp(createUserDto);
   }
