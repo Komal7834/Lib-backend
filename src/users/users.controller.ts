@@ -4,10 +4,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './users.service';
 import { UserEntity } from './users.entity';
 import { CreateUserDto } from './users.dto';
-import { LoginUserDto } from './login.dto';
 import { RolesGuard } from 'src/role.guard';
 import { Roles } from 'src/role.decorator';
 import { Role } from 'src/enum/role.enum';
+import { LoginUserDto } from './login.dto';
 
 @Controller('users')
 export class UserController {
@@ -33,6 +33,11 @@ export class UserController {
     }
   }
   }
+  @Post('login')
+  login(@Body() loginUserDto: LoginUserDto): Promise<{ accessToken: string } > {
+   return this.userService.login(loginUserDto);
+    }
+ 
   
   // Protected Route Example
   @Get('profile')   
