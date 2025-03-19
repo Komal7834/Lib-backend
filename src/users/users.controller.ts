@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request, ConflictException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './users.service';
@@ -13,16 +13,25 @@ import { Role } from 'src/enum/role.enum';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  
   @Post('signup')
-   @UseGuards(RolesGuard)
-   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   signUp(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-    return this.userService.signUp(createUserDto);
+    try {
+      return this.userService.signUp(createUserDto);
+    }
+    catch (error) {
+    if (error instanceof ConflictException) {
+      throw new ConflictException('this email is already exists.');
+      
+    } else if (error instanceof NotFoundException) {
+      throw new NotFoundException(error.message);
+    } else {
+        console.error('Error creating :', error);
+        throw new InternalServerErrorException('Error creating');
+    }
   }
-
-  @Post('login')
-  login(@Body() loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
-    return this.userService.login(loginUserDto);
   }
   
   // Protected Route Example

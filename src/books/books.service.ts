@@ -21,7 +21,7 @@ export class BooksService {
       if (!bookDat.subject) {
         throw new Error("❌ Error: 'subject' field is required!");
       }
-
+       
       const newBook = this.bookRepository.create(bookDat);
       const savedBook = await this.bookRepository.save(newBook);
       return savedBook;
