@@ -11,12 +11,12 @@ import { LoginUserDto } from './login.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   
   @Post('signup')
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.ADMIN)
   signUp(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
       return this.userService.signUp(createUserDto);

@@ -10,7 +10,7 @@ export class BookEntity {
   subject: string;
 
   @Column()
-  bookNo: string;
+  bookNo: number;
 
   @Column()
   book : string;

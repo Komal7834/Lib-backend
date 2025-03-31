@@ -5,7 +5,7 @@ export class UpdateBookDto {
   subject: string;
 
   @IsNotEmpty({ message: "❌ 'bookNo' field is required!" })
-  bookNo: string;
+  bookNo: number;
 
   @IsNotEmpty({ message: "❌ 'author' field is required!" })
   author: string;

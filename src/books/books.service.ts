@@ -22,9 +22,9 @@ export class BooksService {
         throw new Error("❌ Error: 'subject' field is required!");
       }
        
-      const newBook = this.bookRepository.create(bookDat);
-      const savedBook = await this.bookRepository.save(newBook);
-      return savedBook;
+      const newBook = this.bookRepository.create( bookDat); // ✅ Convert DTO to Entity
+      return this.bookRepository.save(newBook);  // ✅ Then save
+      
     } catch (error) {
       throw new Error('❌ Failed to add book. Please check your input data.');
     }
@@ -36,7 +36,7 @@ export class BooksService {
     async findOne(id: number): Promise<BookEntity | null> {
       return this.bookRepository.findOne({ where: { id } });
     }
-
+       
     async update(id: number, updateBookDto: UpdateBookDto): Promise<BookEntity> {
       const book = await this.bookRepository.findOne({ where: { id } });
       if (!book) {

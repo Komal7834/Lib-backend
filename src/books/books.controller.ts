@@ -15,8 +15,8 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Post('addbooks')
-  @UseGuards(RolesGuard)
-  @Roles(Role.LIBRARIAN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.LIBRARIAN)
   @UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
   async addbooks(@Body() createBookDto: CreateBookDto): Promise<BookEntity> {
     try { 
@@ -36,16 +36,16 @@ export class BooksController {
   }
  
   @Get('findAll')
-  @UseGuards(RolesGuard)
-  @Roles(Role.LIBRARIAN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.LIBRARIAN)
     async findAll(): Promise<{ message: string; data: BookEntity[] }> {
       const users = await this.booksService.findAll();
       return { message: "this is your data", data: users };
     }
     
   @Get(':id')
-  @UseGuards(RolesGuard)
-  @Roles(Role.LIBRARIAN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.LIBRARIAN)
   async findOne(@Param('id') id: number): Promise<{ message: string; data: BookEntity | null }> {
     const book = await this.booksService.findOne(id);
     
@@ -58,15 +58,15 @@ export class BooksController {
   }
 
   @Put(':id')
-  @UseGuards(RolesGuard)
-  @Roles(Role.LIBRARIAN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.LIBRARIAN)
   async update(@Param('id') id: string, @Body() updatebookDto: UpdateBookDto ) {
     return this.booksService.update(+id, updatebookDto)
   }
 
   @Delete(':id')
-  @UseGuards(RolesGuard)
-  @Roles(Role.LIBRARIAN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.LIBRARIAN)
   async delete(@Param('id') id: number): Promise<{ message: string;}> {
     const book = await this.booksService.delete(id);
     
