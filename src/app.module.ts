@@ -17,7 +17,7 @@ import { BookEntity } from './books/books.entity';
       port: 5433, // Default PostgreSQL port
       username: 'postgres',
       password: 'Premp7@196',
-      database: 'pagal',
+      database: 'prem',
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Set to false in production
       entities: [UserEntity, BookEntity],

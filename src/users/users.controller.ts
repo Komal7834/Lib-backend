@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, UseGuards, Request, ConflictException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
-
+import { Delete, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './users.service';
 import { UserEntity } from './users.entity';
@@ -52,6 +52,12 @@ export class UserController {
     const users = await this.userService.findAll();
     return { message: "this is your data", data: users };
   }
+  
 
+  @Delete(':email')
+  async deleteUser(@Param('email') email: string) {
+    return this.userService.deleteUserByEmail(email);
+  }
+  
   }  
 

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -50,6 +50,16 @@ export class UserService {
   async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
-
+  async deleteUserByEmail(email: string): Promise<{ message: string }> {
+    const user = await this.userRepository.findOne({ where: { email } });
+  
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+  
+    await this.userRepository.delete({ email });
+    return { message: `User with email ${email} deleted successfully` };
+  }
+ 
   
 }
