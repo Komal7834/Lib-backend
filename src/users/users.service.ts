@@ -34,14 +34,14 @@ export class UserService {
   }
 
   // LOGIN
-  async login(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
+  async login(loginUserDto: LoginUserDto): Promise<{ accessToken: string; role: string  }> {
     const { email, password } = loginUserDto;
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { email: user.email, role: user.role };
       const accessToken = await this.jwtService.signAsync(payload);
-      return { accessToken};
+      return { accessToken, role: user.role };
     } else {
       throw new UnauthorizedException('Invalid credentials');
     }
