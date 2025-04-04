@@ -8,11 +8,15 @@ import { Role } from 'src/enum/role.enum';
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
+   
+  @Column({ nullable: false }) // ✅ Ensure name is properly defined
+  name: string;
 
   @Column({ unique: true })
   @IsEmail()
   email: string;
-
+   
+ 
   @Column()
   password: string;
 

@@ -18,11 +18,12 @@ export class UserService {
 
   // SIGN UP
   async signUp(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { email, password, role, city, mobile } = createUserDto;
+    const { email,name, password, role, city, mobile } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = this.userRepository.create({
       email,
+      name,
       password: hashedPassword,
       role,
       city,
@@ -50,6 +51,7 @@ export class UserService {
   async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
+  // delete users
   async deleteUserByEmail(email: string): Promise<{ message: string }> {
     const user = await this.userRepository.findOne({ where: { email } });
   
