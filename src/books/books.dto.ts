@@ -18,4 +18,6 @@ export class CreateBookDto {
 
   @IsNotEmpty({ message: "❌ 'quantity' field is required!" })
   quantity: number;
+
+ 
 }

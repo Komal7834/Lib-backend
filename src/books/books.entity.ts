@@ -25,4 +25,11 @@ export class BookEntity {
   @Column()
   quantity: number;
 
+@Column({ default: 0 })
+issued: number;
+
+@Column({ default: 0 })
+availability: number;
+
+
 }

@@ -77,8 +77,21 @@ export class BooksController {
     return { message: 'Book deleted' };
     
   }
-   
-}
 
+
+@Post('issue-book')
+  async issueBook(@Body() body: { bookNumber: number; issuedDate: string }) {
+    const book = await this.booksService.issueBook(body.bookNumber, body.issuedDate);
+    return { message: '✅ Book issued successfully!', book };
+  }
+
+  @Post('return-book')
+  async returnBook(@Body() body: { bookNumber: number; returnDate: string }) {
+    const book = await this.booksService.returnBook(body.bookNumber, body.returnDate);
+    return { message: '📦 Book returned successfully!', book };
+  }
+ 
+  }
+  
 
 
