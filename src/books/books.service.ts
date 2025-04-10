@@ -77,17 +77,36 @@ export class BooksService {
   }
 
   // Return a book
-  async returnBook(bookNo: number, returnDate: string) {
-    const book = await this.bookRepository.findOne({ where: { bookNo } });
+ // Return a book
+ async returnBook(issuedBookId: number): Promise<string> {
+  // Step 1: Find the issued record
+  const issuedRecord = await this.issuedBookRepository.findOne({
+    where: { id: issuedBookId },
+    relations: ['book'],
+  });
 
-    if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
-    if ((book.issued || 0) <= 0) throw new Error(`❌ No issued copies to return`);
+  if (!issuedRecord) throw new Error(`❌ Issued record not found`);
 
-    book.issued -= 1;
-    book.availability = book.quantity - book.issued;
+  // Step 2: Get the book associated with this issued record
+  const book = await this.bookRepository.findOne({
+    where: { bookNo: issuedRecord.bookNo },
+  });
 
-    return await this.bookRepository.save(book);
-  }
+  if (!book) throw new Error(`❌ Book not found`);
+
+  // Step 3: Update availability and issued count
+  book.issued = Math.max(0, (book.issued || 1) - 1);
+  book.availability = book.quantity - book.issued;
+
+  await this.bookRepository.save(book);
+
+  // Step 4: Delete the issued record
+  await this.issuedBookRepository.delete(issuedRecord.id);
+
+  return `✅ Book returned successfully`;
+}
+
+
 
   // Get list of all issued books with employee info
   async getIssuedBooks(): Promise<IssuedBookEntity[]> {

@@ -112,7 +112,7 @@ export class BooksController {
 
   @Post('return-book')
   async returnBook(@Body() body: { bookNumber: number; returnDate: string }) {
-    const book = await this.booksService.returnBook(body.bookNumber, body.returnDate);
+    const book = await this.booksService.returnBook(body.bookNumber);
     return { message: '📦 Book returned successfully!', book };
   }
 }

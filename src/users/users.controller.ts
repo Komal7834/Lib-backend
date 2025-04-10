@@ -15,8 +15,8 @@ export class UserController {
 
   
   @Post('signup')
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.ADMIN)
   signUp(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
       return this.userService.signUp(createUserDto);
