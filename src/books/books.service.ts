@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { BookEntity } from './books.entity';
 import { CreateBookDto } from './books.dto';
 import { UpdateBookDto } from './updateBook.dto';
+import { IssuedBookEntity } from './issued-book.entity';
 
 @Injectable()
 export class BooksService {
@@ -11,6 +12,8 @@ export class BooksService {
     @InjectRepository(BookEntity)
     private bookRepository: Repository<BookEntity>,
 
+    @InjectRepository(IssuedBookEntity)
+    private issuedBookRepository: Repository<IssuedBookEntity>, // ✅ FIXED injection
   ) {}
 
   // Add a new book and initialize availability to quantity
@@ -21,7 +24,7 @@ export class BooksService {
 
     const newBook = this.bookRepository.create({
       ...bookDat,
-      availability: bookDat.quantity, // ✅ availability set to quantity
+      availability: bookDat.quantity,
     });
 
     return this.bookRepository.save(newBook);
@@ -54,32 +57,42 @@ export class BooksService {
     return `✅ Book with ID ${id} has been deleted successfully!`;
   }
 
-  // Issue a book and update availability
- // 👇 Paste these methods in BooksService
+  // Issue a book and log the transaction
+  async issueBook(bookNo: number, issuedDate: string, issuedToName: string, employeeId: string) {
+    const book = await this.bookRepository.findOne({ where: { bookNo } });
+    if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
+    if (book.availability <= 0) throw new Error(`❌ Book not available to issue`);
 
-async issueBook(bookNo: number, issuedDate: string) {
-  const book = await this.bookRepository.findOne({ where: { bookNo } });
+    book.issued = (book.issued || 0) + 1;
+    book.availability = book.quantity - book.issued;
+    await this.bookRepository.save(book);
 
-  if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
-  if (book.availability <= 0) throw new Error(`❌ Book not available to issue`);
+    const issuedBook = this.issuedBookRepository.create({
+      bookNo: book.bookNo,
+      issuedToName,
+      employeeId,
+    });
 
-  book.issued = (book.issued || 0) + 1;
-  book.availability = book.quantity - book.issued;
+    return this.issuedBookRepository.save(issuedBook); // ✅ Logs the issue separately
+  }
 
-  return await this.bookRepository.save(book);
-}
+  // Return a book
+  async returnBook(bookNo: number, returnDate: string) {
+    const book = await this.bookRepository.findOne({ where: { bookNo } });
 
-async returnBook(bookNo: number, returnDate: string) {
-  const book = await this.bookRepository.findOne({ where: { bookNo } });
+    if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
+    if ((book.issued || 0) <= 0) throw new Error(`❌ No issued copies to return`);
 
-  if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
-  if ((book.issued || 0) <= 0) throw new Error(`❌ No issued copies to return`);
+    book.issued -= 1;
+    book.availability = book.quantity - book.issued;
 
-  book.issued = book.issued - 1;
-  book.availability = book.quantity - book.issued;
+    return await this.bookRepository.save(book);
+  }
 
-  return await this.bookRepository.save(book);
-}
-
-
-}
+  // Get list of all issued books with employee info
+  async getIssuedBooks(): Promise<IssuedBookEntity[]> {
+    return await this.issuedBookRepository.find({
+      relations: ['book'], // 👈 this loads the related book data
+      order: { issuedDate: 'DESC' }, // optional: sorts latest first
+    });
+  }}

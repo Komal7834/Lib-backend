@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { IsOptional } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique } from 'typeorm';
+import { IssuedBookEntity } from './issued-book.entity';
 
 @Entity('books')
+@Unique(['bookNo'])  
 export class BookEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,6 +33,16 @@ issued: number;
 
 @Column({ default: 0 })
 availability: number;
+
+@Column({ nullable: true, type: 'varchar' })
+issuedToName: string;
+
+@Column({ nullable: true, type: 'varchar' })
+employeeId: string;
+
+
+@OneToMany(() => IssuedBookEntity, issued => issued.book)
+issuedBooks: IssuedBookEntity[];
 
 
 }
