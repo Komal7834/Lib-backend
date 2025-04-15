@@ -57,24 +57,27 @@ export class BooksService {
     return `✅ Book with ID ${id} has been deleted successfully!`;
   }
 
+  
   // Issue a book and log the transaction
-  async issueBook(bookNo: number, issuedDate: string, issuedToName: string, employeeId: string) {
-    const book = await this.bookRepository.findOne({ where: { bookNo } });
-    if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
-    if (book.availability <= 0) throw new Error(`❌ Book not available to issue`);
+async issueBook(bookNo: number, issuedDate: string, issuedToName: string, employeeId: string) {
+  const book = await this.bookRepository.findOne({ where: { bookNo } });
+  if (!book) throw new Error(`❌ Book with Book No ${bookNo} not found`);
+  if (book.availability <= 0) throw new Error(`❌ Book not available to issue`);
 
-    book.issued = (book.issued || 0) + 1;
-    book.availability = book.quantity - book.issued;
-    await this.bookRepository.save(book);
+  book.issued = (book.issued || 0) + 1;
+  book.availability = book.quantity - book.issued;
+  await this.bookRepository.save(book);
 
-    const issuedBook = this.issuedBookRepository.create({
-      bookNo: book.bookNo,
-      issuedToName,
-      employeeId,
-    });
+  const issuedBook = this.issuedBookRepository.create({
+    bookNo: book.bookNo,
+    issuedToName,
+    employeeId,
+    issuedDate: new Date(issuedDate), // ✅ Make sure issuedDate is set
+  });
 
-    return this.issuedBookRepository.save(issuedBook); // ✅ Logs the issue separately
-  }
+  return this.issuedBookRepository.save(issuedBook);
+}
+
 
   // Return a book
  // Return a book
@@ -105,7 +108,6 @@ export class BooksService {
 
   return `✅ Book returned successfully`;
 }
-
 
 
   // Get list of all issued books with employee info
